@@ -1,4 +1,4 @@
-from application import app
+from config.application import app
 from flask_sqlalchemy import SQLAlchemy
 
 POSTGRES = {

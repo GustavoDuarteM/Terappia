@@ -1,6 +1,9 @@
-from sqlalchemy import Column, DateTime, String, Integer, ForeignKey
+from config.database import db
+from flask_sqlalchemy import SQLAlchemy
 
-class BaseModel(db.Model):
+Base = database.db.Model
+ 
+class BaseModel(Base):
 # cxz"""Base data model for all objects"""
 __abstract__ = True
     # define here __repr__ and json methods or any common method
