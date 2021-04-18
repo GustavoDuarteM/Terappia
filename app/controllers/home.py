@@ -1,7 +1,5 @@
-from config.application import app
-from flask import jsonify
+from app import app
 
-@app.route('/sign_in', methods=["POST"])
-def sign_in():
-  response = {"status":"logado"}
-  return jsonify(response)
+@app.route('/')
+def index():
+    return 'Hello, World!'

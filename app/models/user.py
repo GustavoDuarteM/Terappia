@@ -1,6 +1,10 @@
-from base_model import BaseModel
+from app import db 
 
-class User(BaseModel):
-    __tablename__ = 'User'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
+class User(db.Model):
+  __tablename__ = "users"
+
+  id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String, nullable=False)
+  email = db.Column(db.String, unique=True, nullable=False)
+  password = db.Column(db.String, nullable=False)
+  phone = db.Column(db.String, nullable=False)
