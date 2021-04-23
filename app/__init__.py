@@ -13,4 +13,4 @@ manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
 from app.models import user
-from app.controllers import home
+from app.controllers import *
