@@ -4,11 +4,11 @@ from app.models.user import User
 
 @app.route('/sign_in', methods=['POST'])
 def sign_in_user():    
-  user = validate_user(user_params())
-  if user is None:
-    return jsonify({"status": "usuário inválido"}), 404
-  else:
+  user = validate_user(sign_in_user_params())
+  if not user is None:
     return jsonify(user.serialize())
+  else:
+    return jsonify({"status": "usuário inválido"}), 404
 
 def validate_user(_user):  
   try:
@@ -20,5 +20,5 @@ def validate_user(_user):
   except:
     return None
 
-def user_params():
+def sign_in_user_params():
   return request.params.require('user').permit('email', 'password')

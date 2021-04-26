@@ -15,8 +15,10 @@ class Base(db.Model):
     try:
       db.session.add(self)
       db.session.commit()
+      return True
     except:
       print('houve uma falha em salvar')
+      return False
 
   def delete(self):
     try:
