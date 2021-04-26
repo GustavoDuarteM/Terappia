@@ -1,0 +1,7 @@
+Bcrypt-Flask
+Flask
+Flask-JWT
+Flask-Migrate
+Flask-request-params
+Flask-Script
+Flask-SQLAlchemy
