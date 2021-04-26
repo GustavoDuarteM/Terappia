@@ -1,5 +1,5 @@
 from app.models.base import Base
-from app import db 
+from app import db, bcrypt
 
 class User(Base):
   __tablename__ = "users"
@@ -13,5 +13,5 @@ class User(Base):
   def __init__(self, name, email, password, phone):
     self.name = name
     self.email = email
-    self.password = password
+    self.password = bcrypt.generate_password_hash(password)
     self.phone = phone
