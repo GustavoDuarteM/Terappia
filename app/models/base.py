@@ -20,5 +20,7 @@ class Base(db.Model):
     except:
       print('houve uma falha em remover')
   
-  def serialize(self):
-    return {attr: getattr(self, attr) for attr in inspect(self).attrs.keys()}
+  def serialize(self, attr_remove=[]):
+    attrs = inspect(self).attrs.keys()
+    return {attr: getattr(self, attr) for attr in attrs if not attr in attr_remove}
+    
