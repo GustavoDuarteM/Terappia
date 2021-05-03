@@ -1,9 +1,11 @@
-from app import db 
+from app import db, datetime
 from flask_sqlalchemy import inspect
 
 class Base(db.Model):
   __abstract__ = True
   
+  create_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
   def save(self):
     try:
       db.session.add(self)
