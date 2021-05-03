@@ -15,3 +15,6 @@ class User(Base):
     self.email = email
     self.password_hash = bcrypt.generate_password_hash(password)
     self.phone = phone
+
+  def check_password(self, password):
+    return bcrypt.check_password_hash(self.password_hash, password)

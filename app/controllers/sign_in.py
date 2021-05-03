@@ -1,5 +1,5 @@
-from flask import Flask, request, jsonify
-from app import app, bcrypt
+from flask import request, jsonify
+from app import app
 from app.models.user import User
 from flask_jwt_extended import create_access_token
 
@@ -10,12 +10,12 @@ def sign_in_user():
     access_token = create_access_token(identity=user.id)
     return jsonify(access_token=access_token)
   else:
-    return jsonify({"status": "usuário inválido"}), 404
+    return jsonify({"status": "usuário inválido"}), 401
 
 def validate_user(_user):
   try:
     user = User.query.filter_by(email=_user['email']).first()
-    if bcrypt.check_password_hash(user.password_hash, _user['password']):
+    if user and user.check_password(_user['password']):
       return user
   except:
     return None
