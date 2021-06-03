@@ -1,5 +1,4 @@
 from app.models.base import Base
-from app import bcrypt
 from app import db 
 
 class Patient(Base):
