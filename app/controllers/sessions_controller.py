@@ -11,6 +11,13 @@ def new_sessions():
   else:
     return jsonify({"status": "Paciênte inválido"}), 404
 
+@app.route('/sessions/<int:id>', methods=['GET'])
+def show_sessions(id):
+  session = Session.query.get(id)
+  if session:
+      return jsonify(session.serialize(['user','patient']))
+  else:
+    return jsonify({"status": "Sessão inválida"}), 404
 
 def session_params():
   return request.params.require('session').permit("start", "end", "patient_id", "user_id")
