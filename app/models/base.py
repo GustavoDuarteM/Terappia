@@ -25,4 +25,7 @@ class Base(db.Model):
   def serialize(self, attr_remove=[]):
     attrs = inspect(self).attrs.keys()
     return {attr: getattr(self, attr) for attr in attrs if not attr in attr_remove}
-    
+  
+  def setattrs(_self, **kwargs):
+    for k,v in kwargs.items():
+        setattr(_self, k, v)
