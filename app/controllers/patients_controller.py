@@ -10,6 +10,14 @@ def new_patients():
   else:
     return jsonify({"status": "Paciênte inválido"}), 404
 
+@app.route('/patients/<int:id>', methods=['GET'])
+def show_patients(id):
+  patient = Patient.query.get(id)
+  if patient:
+      return jsonify(patient.serialize(['user']))
+  else:
+    return jsonify({"status": "Paciente inválido"}), 404
+
 
 def patient_params():
   return request.params.require('patient').permit("name", "email", "phone", "user_id")
