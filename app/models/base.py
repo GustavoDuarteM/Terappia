@@ -4,7 +4,7 @@ from flask_sqlalchemy import inspect
 class Base(db.Model):
   __abstract__ = True
   
-  create_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+  create_at = db.Column(db.DateTime, default=datetime.now, nullable=False)
 
   def save(self):
     try:
