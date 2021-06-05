@@ -1,11 +1,12 @@
 from app import jwt
+from app.models.user import User
 
 
 # Register a callback function that takes whatever object is passed in as the
 # identity when creating JWTs and converts it to a JSON serializable format.
 @jwt.user_identity_loader
 def user_identity_lookup(user):
-    return user.id
+    return user
 
 
 # Register a callback function that loades a user from your database whenever
