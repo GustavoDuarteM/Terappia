@@ -11,7 +11,7 @@ def new_patients():
   if patient.save():
       return jsonify(patient = patient.serialize(['user','sessions']))
   else:
-    return jsonify({"status": "Paciênte inválido"}), 404
+    return invalid_patient()
 
 @app.route('/patients/<int:id>', methods=['GET'])
 @jwt_required()
@@ -20,18 +20,22 @@ def show_patients(id):
   if patient:
       return jsonify(patient = patient.serialize(['user','sessions']))
   else:
-    return jsonify({"status": "Paciente inválido"}), 404
+    return invalid_patient()
 
 @app.route('/patients', methods=['PUT'])
 @jwt_required()
 def edit_patients():
   params = patient_params()
   patient = Patient.query.filter_by(id= params['id'], user_id= current_user.id).first()
+  if not patient : return invalid_patient()
   patient.setattrs(**patient_params())
   if patient.save():
     return jsonify(patient = patient.serialize(['user','sessions']))
   else:
-    return jsonify({"status": "Paciênte inválido"}), 404
+    return invalid_patient()
 
 def patient_params():
   return request.params.require('patient').permit("id","name", "email", "phone")
+
+def invalid_patient():
+  return jsonify({"status": "Paciente inválido"}), 404
