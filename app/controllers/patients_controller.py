@@ -16,8 +16,6 @@ def new_patients():
 @app.route('/patients/<int:id>', methods=['GET'])
 @jwt_required()
 def show_patients(id):
-  print(id)
-  print(current_user.id)
   patient = Patient.query.filter_by(id = id, user_id = current_user.id).first()
   if patient:
       return jsonify(patient = patient.serialize(['user','sessions']))
