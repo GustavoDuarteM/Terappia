@@ -21,6 +21,7 @@ manager.add_command('db', MigrateCommand)
 bcrypt = Bcrypt(app)
 
 jwt = JWTManager(app)
+from app.controllers.helpers.session import *
 
 timezone(timedelta(hours=-3))
 
