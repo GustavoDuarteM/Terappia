@@ -34,6 +34,26 @@ def edit_patients():
   else:
     return invalid_patient()
 
+@app.route('/patients', methods=['GET'])
+@jwt_required()
+def all_patients():
+  param_page = request.args.get('page')
+  param_name = request.args.get('name')
+  patients = Patient.query.filter_by(user_id = current_user.id)
+
+  if param_name: 
+    search = "%{}%".format(param_name)
+    patients = patients.filter(Patient.name.like(search))
+
+  if param_page:
+    try: 
+      param_page = int(param_page)
+    except ValueError:
+      param_page = 1
+
+  patients = patients.paginate(page=param_page, per_page= 10).items
+  return jsonify(patients = list(map(lambda patient: patient.serialize(['user','sessions']), patients)))
+
 def patient_params():
   return request.params.require('patient').permit("id","name", "email", "phone")
 
