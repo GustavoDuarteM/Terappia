@@ -8,3 +8,8 @@ services:
       [5432:5432]
     volumes:
       - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+  redis:
+    image: redis:6.2.1
+    ports:
+      [6379:6379]
+    

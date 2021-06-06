@@ -6,6 +6,7 @@ from flask_request_params import bind_request_params
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from datetime import datetime, timezone, timedelta
+import redis
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -24,6 +25,9 @@ bcrypt = Bcrypt(app)
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 jwt = JWTManager(app)
+jwt_redis_blocklist = redis.StrictRedis(
+  host="localhost", port=6379, db=0, decode_responses=True
+)
 from app.controllers.helpers.session import *
 
 
