@@ -1,4 +1,7 @@
 version: '3'
+networks: 
+  db_redis:
+  db_postgres:
 services:
   db:
     image: postgres:13.2
@@ -6,10 +9,23 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       [5432:5432]
+    networks: 
+      - db_postgres
     volumes:
       - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
   redis:
     image: redis:6.2.1
     ports:
       [6379:6379]
-    
+    networks: 
+      - db_redis
+  app: 
+    build: .
+    ports:
+      [80:80]
+    depends_on:
+      - db
+      - redis
+    networks:
+      db_redis:
+      db_postgres:
