@@ -2,6 +2,7 @@ from app.models import user
 from flask import request, jsonify
 from app import app
 from app.models.patient import Patient
+from app.models.session import Session
 from flask_jwt_extended import jwt_required, current_user
 
 @app.route('/patients', methods=['POST'])
@@ -53,6 +54,19 @@ def all_patients():
 
   patients = patients.paginate(page=param_page, per_page= 10).items
   return jsonify(patients = list(map(lambda patient: patient.serialize(['user','sessions']), patients)))
+
+@app.route('/patients/<int:patient_id>/sessions', methods=['GET'])
+@jwt_required()
+def patient_sessions(patient_id):
+  param_page = request.args.get('page')
+  session = Session.query.filter_by(patient_id = patient_id, user_id = current_user.id)
+  if param_page:
+    try: 
+      param_page = int(param_page)
+    except ValueError:
+      param_page = 1
+  sessions = session.paginate(page=param_page, per_page= 10).items
+  return jsonify(patients = list(map(lambda session: session.serialize(['user','patient']), sessions)))
 
 def patient_params():
   return request.params.require('patient').permit("id","name", "email", "phone")
