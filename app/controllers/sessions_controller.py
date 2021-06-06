@@ -10,7 +10,10 @@ def new_sessions():
   params = session_params()
   patient = Patient.query.filter_by(id = params['patient_id'], user_id = current_user.id).first()
   if not patient : return invalid_session()
+  
   session = Session(**session_params(), user_id = current_user.id )
+  if not session.valid(): return invalid_session()
+  
   if session.save():
       return jsonify(session = session.serialize(['user','patient']))
   else:
@@ -35,6 +38,7 @@ def edit_sessions():
   if params['start'] : session.start =  datetime.strptime(params['start'], "%Y-%m-%d %H:%M")
   if params['end'] : session.end = datetime.strptime(params['end'], "%Y-%m-%d %H:%M") 
   session.patient = patient
+  if not session.valid(): return invalid_session()
   if session.save():
       return jsonify(session = session.serialize(['user','patient']))
   else:
@@ -43,7 +47,6 @@ def edit_sessions():
 @app.route('/sessions', methods=['GET'])
 @jwt_required()
 def all_session():
-  
   sessions = Session.query.filter_by(user_id = current_user.id)
   try: 
     if request.args.get('page') is None: raise ValueError
