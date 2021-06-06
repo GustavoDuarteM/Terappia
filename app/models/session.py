@@ -1,3 +1,4 @@
+from app.models import user
 from app.models.base import Base
 from app import db, datetime
 from app.models.user import User
@@ -22,3 +23,15 @@ class Session(Base):
     self.end = datetime.strptime(end, "%Y-%m-%d %H:%M") 
     self.patient_id = patient_id 
     self.user_id = user_id
+
+  def valid(self):
+    if self.end >= self.start : return False
+    try:
+      sessions = Session.query.filter_by(user_id= self.user_id)
+      sessions = sessions.filter( 
+        ((Session.start >= self.start) & (Session.start <= self.end)) 
+        |  ((Session.end >= self.start) & (Session.end <= self.end))
+      )
+      return sessions.count() < 1
+    except:
+      return False
