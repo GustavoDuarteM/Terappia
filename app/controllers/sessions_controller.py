@@ -40,6 +40,28 @@ def edit_sessions():
   else:
     return invalid_session()
 
+@app.route('/sessions', methods=['GET'])
+@jwt_required()
+def all_session():
+  
+  sessions = Session.query.filter_by(user_id = current_user.id)
+  try: 
+    if request.args.get('page') is None: raise ValueError
+    param_page = int(request.args.get('page'))
+  except ValueError:
+    param_page = 1
+
+  try: 
+    param_date = request.args.get('date')
+    start = datetime.strptime(param_date, "%Y-%m-%d")
+    end = start.replace(hour=23, minute=59)
+    sessions = sessions.filter(Session.start >= start).filter(Session.start <= end)
+  except:
+    pass
+  
+  sessions = sessions.paginate(page=param_page, per_page= 10).items
+  return jsonify(sessions = list(map(lambda session: session.serialize(['user','patient']), sessions)))
+
 def session_params():
   return request.params.require('session').permit("id","start", "end", "patient_id")
 
