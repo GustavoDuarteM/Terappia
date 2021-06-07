@@ -21,6 +21,9 @@ services:
       - db_redis
   app: 
     build: .
+    volumes:
+      - ./app:/app/app
+    restart: always
     ports:
       [80:80]
     depends_on:

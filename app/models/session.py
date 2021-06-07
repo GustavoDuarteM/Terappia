@@ -25,9 +25,11 @@ class Session(Base):
     self.user_id = user_id
 
   def valid(self):
-    if self.end >= self.start : return False
+    if self.start >= self.end : return False
     try:
       sessions = Session.query.filter_by(user_id= self.user_id)
+      if sessions.count() == 0 : return True
+      sessions = sessions.filter( Session.id != self.id )
       sessions = sessions.filter( 
         ((Session.start >= self.start) & (Session.start <= self.end)) 
         |  ((Session.end >= self.start) & (Session.end <= self.end))
