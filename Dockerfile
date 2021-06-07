@@ -1,6 +1,5 @@
 FROM tiangolo/uwsgi-nginx-flask
 
-COPY ./app /app/app
 COPY manage.py /app
 COPY config.py /app
 COPY app.py /app

@@ -35,8 +35,9 @@ def edit_sessions():
   session = Session.query.filter_by(id = params['id'], user_id = current_user.id).first()
   patient = Patient.query.filter_by(id = params['patient_id'], user_id = current_user.id).first()
   if (not session) or (not patient): return invalid_session() 
-  if params['start'] : session.start =  datetime.strptime(params['start'], "%Y-%m-%d %H:%M")
-  if params['end'] : session.end = datetime.strptime(params['end'], "%Y-%m-%d %H:%M") 
+  if params['start'] and params['end']:
+    session.start =  datetime.strptime(params['start'], "%Y-%m-%d %H:%M")
+    session.end = datetime.strptime(params['end'], "%Y-%m-%d %H:%M") 
   session.patient = patient
   if not session.valid(): return invalid_session()
   if session.save():
@@ -64,6 +65,16 @@ def all_session():
   
   sessions = sessions.paginate(page=param_page, per_page= 10).items
   return jsonify(sessions = list(map(lambda session: session.serialize(['user','patient']), sessions)))
+
+@app.route('/sessions/<int:id>', methods=['DELETE'])
+@jwt_required()
+def session_delete(id):
+  session = Session.query.filter_by(id = id, user_id = current_user.id).first()
+  if not session : return invalid_session()
+  if session.delete():
+      return jsonify({"status": "Sessão removida"})
+  else:
+    return invalid_session()
 
 def session_params():
   return request.params.require('session').permit("id","start", "end", "patient_id")

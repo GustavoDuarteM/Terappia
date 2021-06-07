@@ -19,8 +19,10 @@ class Base(db.Model):
     try:
       db.session.delete(self)
       db.session.commit()
+      return True
     except:
       print('houve uma falha em remover')
+      return False
   
   def serialize(self, attr_remove=[]):
     attrs = inspect(self).attrs.keys()
