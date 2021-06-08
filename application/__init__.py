@@ -26,10 +26,11 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 jwt = JWTManager(app)
 jwt_redis_blocklist = redis.StrictRedis(
-  host="pd836355fd7e03187b62a458944ebc079be3d250642ebcd439422371994a18d5e@ec2-3-217-135-220.compute-1.amazonaws.com", 
+  host="ec2-3-217-135-220.compute-1.amazonaws.com", 
   port=24249,
-   db=0, 
-   decode_responses=True
+  password="pd836355fd7e03187b62a458944ebc079be3d250642ebcd439422371994a18d5e",
+  db=0, 
+  decode_responses=True
 )
 from application.controllers.helpers.session import *
 
