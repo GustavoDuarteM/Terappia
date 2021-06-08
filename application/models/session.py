@@ -1,8 +1,8 @@
-from app.models import user
-from app.models.base import Base
-from app import db, datetime
-from app.models.user import User
-from app.models.patient import Patient
+from application.models import user
+from application.models.base import Base
+from application import db, datetime
+from application.models.user import User
+from application.models.patient import Patient
 
 class Session(Base):
   __tablename__ = "sessions"

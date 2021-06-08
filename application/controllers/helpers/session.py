@@ -1,5 +1,5 @@
-from app import jwt, jwt_redis_blocklist
-from app.models.user import User
+from application import jwt, jwt_redis_blocklist
+from application.models.user import User
 
 
 # Register a callback function that takes whatever object is passed in as the

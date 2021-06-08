@@ -1,6 +1,6 @@
 from flask import request, jsonify
-from app import app, jwt_redis_blocklist
-from app.models.user import User
+from application import app, jwt_redis_blocklist
+from application.models.user import User
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt
 from datetime import timedelta
 
