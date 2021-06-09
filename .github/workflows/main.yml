@@ -24,5 +24,5 @@ jobs:
         with:
           args: git:remote -a boiling-beyond-42058
       - name: push
-        run: git push heroku master
+        run: git subtree push --prefix boiling-beyond-42058 master
         
