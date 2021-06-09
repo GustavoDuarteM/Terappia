@@ -1,6 +1,6 @@
-from app.models.base import Base
-from app import db
-from app.models.user import User
+from application.models.base import Base
+from application import db
+from application.models.user import User
 
 class Patient(Base):
   __tablename__ = "patients"

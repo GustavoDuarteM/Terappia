@@ -28,8 +28,8 @@ jwt = JWTManager(app)
 jwt_redis_blocklist = redis.StrictRedis(
   host="redis", port=6379, db=0, decode_responses=True
 )
-from app.controllers.helpers.session import *
+from application.controllers.helpers.session import *
 
 
-from app.models import *
-from app.controllers import *
+from application.models import *
+from application.controllers import *
