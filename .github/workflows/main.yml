@@ -5,12 +5,12 @@ jobs:
   heroku-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-      - name: Add api remote origin
+      - name: set remote
         run: |
-          git remote add heroku-api https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_SERVE_APP_NAME }}.git
-      - name: Deploy api to Heroku
+            git remote add heroku-api https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_SERVE_APP_NAME }}.git
+        
+      - name: Add api remote origin
+      - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
