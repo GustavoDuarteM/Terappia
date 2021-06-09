@@ -3,7 +3,6 @@ from application import app, jwt_redis_blocklist
 from application.models.user import User
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt
 from datetime import timedelta
-import sys
 
 @app.route('/sign_in', methods=['POST'])
 def sign_in_user():    
@@ -30,8 +29,7 @@ def sign_up():
 @jwt_required(refresh=True)
 def refresh():
     identity = get_jwt_identity()
-    print(identity)
-    sys.stdout.flush()
+    app.logger.info(identity)
     access_token = create_access_token(identity=identity, fresh=False)
     return jsonify(access_token=access_token)
 
