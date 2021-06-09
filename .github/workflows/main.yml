@@ -22,7 +22,7 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         with:
-          args: git:remote -a ${{ secrets.HEROKU_APP_NAME }}
+          args: git:remote -a boiling-beyond-42058
       - name: push
         run: git subtree push --prefix server heroku master
         
