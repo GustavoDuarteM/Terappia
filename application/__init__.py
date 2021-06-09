@@ -19,9 +19,6 @@ app.before_request(bind_request_params)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-manager = Manager(app)
-manager.add_command('db', MigrateCommand)
-
 bcrypt = Bcrypt(app)
 
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
@@ -41,3 +38,6 @@ from application.controllers.helpers.session import *
 
 from application.models import *
 from application.controllers import *
+
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
