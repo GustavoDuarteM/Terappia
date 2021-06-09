@@ -1,8 +1,8 @@
-from app.models import user
+from application.models import user
 from flask import request, jsonify
-from app import app
-from app.models.patient import Patient
-from app.models.session import Session
+from application import app
+from application.models.patient import Patient
+from application.models.session import Session
 from flask_jwt_extended import jwt_required, current_user
 
 @app.route('/patients', methods=['POST'])

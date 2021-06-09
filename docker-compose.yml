@@ -22,8 +22,7 @@ services:
   app: 
     build: .
     volumes:
-      - ./app:/app/app
-    restart: always
+      - ./application:/app/application
     ports:
       [80:80]
     depends_on:

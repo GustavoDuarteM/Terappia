@@ -1,4 +1,4 @@
-from app import db, datetime
+from application import db, datetime
 from flask_sqlalchemy import inspect
 
 class Base(db.Model):

@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from app import app
+from application import app
 
 @app.errorhandler(404)
 def resource_not_found(e):

@@ -7,6 +7,8 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from datetime import datetime, timezone, timedelta
 import redis
+from dotenv import load_dotenv
+load_dotenv('.env')
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -17,19 +19,25 @@ app.before_request(bind_request_params)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-manager = Manager(app)
-manager.add_command('db', MigrateCommand)
-
 bcrypt = Bcrypt(app)
 
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 jwt = JWTManager(app)
+
 jwt_redis_blocklist = redis.StrictRedis(
-  host="redis", port=6379, db=0, decode_responses=True
+  host = app.config['REDIS_HOST'], 
+  port = app.config['REDIS_PORT'], 
+  password = app.config['REDIS_PASSWORD'],
+  db=0, 
+  decode_responses=True
 )
-from app.controllers.helpers.session import *
+
+from application.controllers.helpers.session import *
 
 
-from app.models import *
-from app.controllers import *
+from application.models import *
+from application.controllers import *
+
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
