@@ -27,9 +27,15 @@ bcrypt = Bcrypt(app)
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 jwt = JWTManager(app)
+
 jwt_redis_blocklist = redis.StrictRedis(
-  host="redis", port=6379, db=0, decode_responses=True
+  host = app.config['REDIS_HOST'], 
+  port = app.config['REDIS_PORT'], 
+  password = app.config['REDIS_PASSWORD'],
+  db=0, 
+  decode_responses=True
 )
+
 from application.controllers.helpers.session import *
 
 
