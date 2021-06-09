@@ -22,9 +22,9 @@ services:
   app: 
     build: .
     volumes:
-      - ./app:/app/app
-    expose: :
-      - 127.0.0.1:5000
+      - ./application:/app/application
+    ports:
+      [80:80]
     depends_on:
       - db
       - redis

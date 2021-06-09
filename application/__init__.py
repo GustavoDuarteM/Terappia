@@ -7,6 +7,8 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from datetime import datetime, timezone, timedelta
 import redis
+from dotenv import load_dotenv
+load_dotenv('.env')
 
 app = Flask(__name__)
 app.config.from_object('config')

@@ -1,3 +1,5 @@
-SQLALCHEMY_DATABASE_URI = "postgresql://postgres:password@db:5432/terapia_app"
+from os import environ 
+
+SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL')
 SQLALCHEMY_TRACK_MODIFICATIONS = True
-JWT_SECRET_KEY = "super-secret" 
+JWT_SECRET_KEY = environ.get('JWT_SECRET_KEY')

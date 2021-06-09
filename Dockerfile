@@ -1,7 +1,8 @@
-FROM tiangolo/uwsgi-nginx-flask:latest
+FROM tiangolo/uwsgi-nginx-flask
 
 WORKDIR /app
 ADD manage.py /app
+ADD .env /app
 ADD config.py /app
 ADD app.py /app
 ADD requirements.txt /app
