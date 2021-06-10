@@ -2,20 +2,20 @@
 # https://hub.docker.com/r/library/python/tags/
 image: python:3.8-slim
 
-before_script:
-  - python -V # Print out python version for debugging
-
 test:
   script:
     - python -m pip install --upgrade pip
     - if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+before_script:
+  - apt-get update -yq
+  - apt-get install -y ruby-dev
+  - gem install dpl
+  - gem install bundler
+  
 production:
   stage: deploy
   script:
-    - apt-get update -yq
-    - apt-get install -y ruby-dev
-    - gem install dpl
     - dpl --provider=heroku --app=$HEROKU_PRODUCTION_APP --api_key=$HEROKU_PRODUCTION_API_KEY
   only:
     - master
