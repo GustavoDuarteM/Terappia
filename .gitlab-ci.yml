@@ -9,3 +9,12 @@ test:
   script:
     - python -m pip install --upgrade pip
     - if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+production:
+  script:
+  - apt-get update -qy
+  - apt-get install -y ruby-dev
+  - gem install dpl
+  - dpl --provider=heroku --app=$HEROKU_PRODUCTION_APP --api-key=$HEROKU_PRODUCTION_API_KEY --skip-cleanup
+  only:
+  - master
