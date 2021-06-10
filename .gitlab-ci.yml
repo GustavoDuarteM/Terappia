@@ -13,7 +13,8 @@ production:
   - apt-get update -yq
   - apt-get install -y ruby-dev
   - gem install dpl
-  - gem install bundler
-  - dpl heroku --api_key=$HEROKU_PRODUCTION_API_KEY
+  - gem install bundler  
+  - dpl --provider=heroku --app=$HEROKU_PRODUCTION_APP --api-key=$HEROKU_PRODUCTION_API_KEY --skip-cleanup
+
   only:
     - master
