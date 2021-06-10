@@ -14,6 +14,6 @@ production:
   - apt-get install -y ruby-dev
   - gem install dpl
   - gem install bundler
-    - dpl heroku --app=$HEROKU_PRODUCTION_APP --api_key=$HEROKU_PRODUCTION_API_KEY
+  - dpl heroku --app=$HEROKU_PRODUCTION_APP --api_key=$HEROKU_PRODUCTION_API_KEY
   only:
     - master
