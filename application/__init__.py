@@ -8,6 +8,7 @@ from flask_jwt_extended import JWTManager
 from datetime import datetime, timezone, timedelta
 import redis
 from dotenv import load_dotenv
+from flask_cors import CORS
 load_dotenv('.env')
 
 app = Flask(__name__)
@@ -15,6 +16,8 @@ app.config.from_object('config')
 timezone(timedelta(hours=-3))
 
 app.before_request(bind_request_params)
+
+CORS(app)
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
