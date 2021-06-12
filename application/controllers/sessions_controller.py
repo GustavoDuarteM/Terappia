@@ -15,7 +15,7 @@ def new_sessions():
   if not session.valid(): return invalid_session()
   
   if session.save():
-      return jsonify(session = session.serialize(['user','patient']))
+      return jsonify(session =  serilize_response(session))
   else:
     return invalid_session()
 
@@ -24,7 +24,7 @@ def new_sessions():
 def show_sessions(id):
   session = Session.query.filter_by(id = id, user_id = current_user.id).first()
   if session:
-      return jsonify(session = session.serialize(['user','patient']))
+      return jsonify(session =  serilize_response(session))
   else:
     return invalid_session()
 
@@ -41,7 +41,7 @@ def edit_sessions():
   session.patient = patient
   if not session.valid(): return invalid_session()
   if session.save():
-      return jsonify(session = session.serialize(['user','patient']))
+      return jsonify(session =  serilize_response(session))
   else:
     return invalid_session()
 
@@ -64,7 +64,7 @@ def all_session():
     pass
   
   sessions = sessions.paginate(page=param_page, per_page= 10).items
-  return jsonify(sessions = list(map(lambda session: session.serialize(['user','patient']), sessions)))
+  return jsonify(sessions = list(map(lambda session: serilize_response(session), sessions)))
 
 @app.route('/sessions/<int:id>', methods=['DELETE'])
 @jwt_required()
@@ -81,3 +81,6 @@ def session_params():
 
 def invalid_session():
   return jsonify({"status": "Sessão inválida"}), 404
+
+def serilize_response(session):
+  return {**session.serialize(['user_id','user','patient']),'patient': { **session.patient.serialize(['user_id','user','sessions'])}}

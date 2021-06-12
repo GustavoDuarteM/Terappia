@@ -39,6 +39,13 @@ def sign_out():
     jwt_redis_blocklist.set(jti, "", ex = timedelta(hours=1))
     return jsonify(msg="Access token revoked")
 
+@app.route("/user", methods=["GET"])
+@jwt_required()
+def get_user():
+    identity = get_jwt_identity()
+    user = User.query.get(identity)
+    return jsonify(user= user.serialize(['id','patients','sessions','password_hash']))
+
 def validate_user(_user):
   try:
     user = User.query.filter_by(email=_user['email']).first()

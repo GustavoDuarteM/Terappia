@@ -1,7 +1,12 @@
 from os import environ 
 import re
 
-SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL').replace("postgres","postgresql")
+
+SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL')
+if  re.split('[\:]', environ.get('DATABASE_URL'))[0] == "postgres":
+  SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL').replace("postgres","postgresql")
+  
+
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 JWT_SECRET_KEY = environ.get('JWT_SECRET_KEY')
 if 'REDIS_URL' in environ:
