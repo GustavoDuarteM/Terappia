@@ -10,7 +10,7 @@ from flask_jwt_extended import jwt_required, current_user
 def new_patients():
   patient = Patient(**patient_params(), user_id = current_user.id )
   if patient.save():
-      return jsonify(patient = patient.serialize(['user','sessions']))
+      return jsonify(patient = patient.serialize(['user_id','user','sessions']))
   else:
     return invalid_patient()
 
@@ -19,7 +19,7 @@ def new_patients():
 def show_patients(id):
   patient = Patient.query.filter_by(id = id, user_id = current_user.id).first()
   if patient:
-      return jsonify(patient = patient.serialize(['user','sessions']))
+      return jsonify(patient = patient.serialize(['user_id','user','sessions']))
   else:
     return invalid_patient()
 
@@ -31,7 +31,7 @@ def edit_patients():
   if not patient : return invalid_patient()
   patient.setattrs(**patient_params())
   if patient.save():
-    return jsonify(patient = patient.serialize(['user','sessions']))
+    return jsonify(patient = patient.serialize(['user_id','user','sessions']))
   else:
     return invalid_patient()
 
@@ -53,7 +53,7 @@ def all_patients():
       param_page = 1
 
   patients = patients.paginate(page=param_page, per_page= 10).items
-  return jsonify(patients = list(map(lambda patient: patient.serialize(['user','sessions']), patients)))
+  return jsonify(patients = list(map(lambda patient: patient.serialize(['user_id','user','sessions']), patients)))
 
 @app.route('/patients/<int:patient_id>/sessions', methods=['GET'])
 @jwt_required()
@@ -66,7 +66,7 @@ def patient_sessions(patient_id):
     except ValueError:
       param_page = 1
   sessions = session.paginate(page=param_page, per_page= 10).items
-  return jsonify(patients = list(map(lambda session: session.serialize(['user','patient']), sessions)))
+  return jsonify(patient = list(map(lambda session: session.serialize(['user_id','user','patient']), sessions)))
 
 def patient_params():
   return request.params.require('patient').permit("id","name", "email", "phone")
