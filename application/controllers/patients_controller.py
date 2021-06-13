@@ -40,7 +40,7 @@ def edit_patients():
 def all_patients():
   param_page = request.args.get('page')
   param_name = request.args.get('name')
-  patients = Patient.query.filter_by(user_id = current_user.id)
+  patients = Patient.query.filter_by(user_id = current_user.id).order_by(Patient.name.asc())
 
   if param_name: 
     search = "%{}%".format(param_name)
@@ -49,10 +49,10 @@ def all_patients():
   if param_page:
     try: 
       param_page = int(param_page)
+      patients = patients.paginate(page=param_page, per_page= 10).items
     except ValueError:
-      param_page = 1
+      pass
 
-  patients = patients.paginate(page=param_page, per_page= 10).items
   return jsonify(patients = list(map(lambda patient: patient.serialize(['user_id','user','sessions']), patients)))
 
 @app.route('/patients/<int:patient_id>/sessions', methods=['GET'])
@@ -63,9 +63,10 @@ def patient_sessions(patient_id):
   if param_page:
     try: 
       param_page = int(param_page)
+      sessions = session.paginate(page=param_page, per_page= 10).items
     except ValueError:
-      param_page = 1
-  sessions = session.paginate(page=param_page, per_page= 10).items
+      pass
+
   return jsonify(patient = list(map(lambda session: session.serialize(['user_id','user','patient']), sessions)))
 
 def patient_params():
