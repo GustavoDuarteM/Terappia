@@ -48,12 +48,13 @@ def edit_sessions():
 @app.route('/sessions', methods=['GET'])
 @jwt_required()
 def all_session():
-  sessions = Session.query.filter_by(user_id = current_user.id)
+  sessions = Session.query.filter_by(user_id = current_user.id).order_by(Session.start.asc())
   try: 
     if request.args.get('page') is None: raise ValueError
     param_page = int(request.args.get('page'))
+    sessions = sessions.paginate(page=param_page, per_page= 10).items
   except ValueError:
-    param_page = 1
+    pass
 
   try: 
     param_date = request.args.get('date')
@@ -62,8 +63,7 @@ def all_session():
     sessions = sessions.filter(Session.start >= start).filter(Session.start <= end)
   except:
     pass
-  
-  sessions = sessions.paginate(page=param_page, per_page= 10).items
+
   return jsonify(sessions = list(map(lambda session: serilize_response(session), sessions)))
 
 @app.route('/sessions/<int:id>', methods=['DELETE'])
