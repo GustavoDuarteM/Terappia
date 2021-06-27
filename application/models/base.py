@@ -1,5 +1,6 @@
 from application import db, datetime
 from flask_sqlalchemy import inspect
+from enum import Enum
 
 class Base(db.Model):
   __abstract__ = True
@@ -25,9 +26,19 @@ class Base(db.Model):
       return False
   
   def serialize(self, attr_remove=[]):
+    attr_remove.append('create_at')
     attrs = inspect(self).attrs.keys()
-    return {attr: getattr(self, attr) for attr in attrs if not attr in attr_remove}
-  
+    result = {}
+    for attr in attrs:
+      val = getattr(self, attr)
+      if not attr in attr_remove and not issubclass(type(val), Base):
+        if isinstance(val, Enum):
+          result.update({attr: val.value})
+        else:
+          result.update({attr: val})
+
+    return result
+
   def setattrs(_self, **kwargs):
     for k,v in kwargs.items():
         setattr(_self, k, v)
