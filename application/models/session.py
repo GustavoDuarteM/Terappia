@@ -11,7 +11,10 @@ class Session(Base):
   start = db.Column(db.DateTime, nullable=False)
   end = db.Column(db.DateTime, nullable=False)
   comments = db.Column(db.String, default = "")
-  status = db.Column(db.Enum(StatusSessionEnum), default = StatusSessionEnum.PENDING, nullable=False, server_default=StatusSessionEnum.PENDING.value)
+  status = db.Column( db.Enum(StatusSessionEnum), 
+                      default = StatusSessionEnum.PENDING, 
+                      server_default=StatusSessionEnum.PENDING.name, 
+                      nullable=False)
 
   patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'), nullable=False)
   patient = db.relationship('Patient',backref=db.backref('sessions', lazy=True))

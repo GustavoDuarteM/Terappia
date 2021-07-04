@@ -23,7 +23,7 @@ def upgrade():
     session_status.create(op.get_bind())
 
     op.add_column('sessions', sa.Column('comments', sa.String(), nullable=True))
-    op.add_column('sessions', sa.Column('status', sa.Enum('PENDING', 'ANSWERED', 'MISSED', name='status_session_enum'), nullable=False))
+    op.add_column('sessions', sa.Column('status', sa.Enum('PENDING', 'ANSWERED', 'MISSED', name='status_session_enum'), server_default='PENDING', nullable=False))
     # ### end Alembic commands ###
 
 
