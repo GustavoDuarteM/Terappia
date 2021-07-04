@@ -35,7 +35,7 @@ def edit_sessions():
   params = update_session_params()
   session = Session.query.filter_by(id = params['id'], user_id = current_user.id).first()
   patient = Patient.query.filter_by(id = params['patient_id'], user_id = current_user.id).first()
-  if (not session) or (not patient): return invalid_session() 
+  if (not session) or (not patient): return invalid_session()
 
   if params['start'] and params['end']:
     session.start = datetime.strptime(params['start'], "%Y-%m-%d %H:%M")
@@ -60,23 +60,39 @@ def edit_sessions():
 @app.route('/sessions', methods=['GET'])
 @jwt_required()
 def all_session():
-  sessions = Session.query.filter_by(user_id = current_user.id).order_by(Session.start.asc())
+  sessions = Session.query.filter_by(user_id = current_user.id)\
+                          .order_by(Session.start.asc())
+  has_next = has_prev = False
+  
   try: 
-    if request.args.get('page') is None: raise ValueError
-    param_page = int(request.args.get('page'))
-    sessions = sessions.paginate(page=param_page, per_page= 10).items
-  except ValueError:
+    param_name = request.args.get('name')
+    if param_name:
+      search = "%{}%".format(param_name)
+      sessions = sessions.join(Patient, Session.patient_id == Patient.id)\
+                         .filter(Patient.name.like(search))
+  except:
     pass
 
   try: 
     param_date = request.args.get('date')
-    start = datetime.strptime(param_date, "%Y-%m-%d")
+    start = datetime.strptime(param_date, "%Y-%m-%d").replace(hour=00, minute=00)
     end = start.replace(hour=23, minute=59)
-    sessions = sessions.filter(Session.start >= start).filter(Session.start <= end)
+    sessions = sessions.filter(Session.start >= start)\
+                       .filter(Session.start <= end)
   except:
     pass
 
-  return jsonify(sessions = list(map(lambda session: serilize_response(session), sessions)))
+  try: 
+    if request.args.get('page') is None: raise ValueError
+    param_page = int(request.args.get('page'))
+    sessions = sessions.paginate(page=param_page, per_page= 10)
+    has_next = sessions.has_next
+    has_prev = sessions.has_prev
+    sessions = sessions.items
+  except ValueError:
+    pass
+
+  return jsonify(sessions = list(map(lambda session: serilize_response(session), sessions)), has_next = has_next, hast_prev = has_prev )
 
 @app.route('/sessions/<int:id>', methods=['DELETE'])
 @jwt_required()
