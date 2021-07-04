@@ -1,8 +1,8 @@
-from application.models import user
 from application.models.base import Base
 from application import db, datetime
 from application.models.user import User
 from application.models.patient import Patient
+from application.models.enums.session_status import StatusSessionEnum
 
 class Session(Base):
   __tablename__ = "sessions"
@@ -10,6 +10,8 @@ class Session(Base):
   id = db.Column(db.Integer, primary_key=True)
   start = db.Column(db.DateTime, nullable=False)
   end = db.Column(db.DateTime, nullable=False)
+  status = db.Column(db.Enum(StatusSessionEnum), default = StatusSessionEnum.PENDING)
+  comments = db.Column(db.String, default = "")
 
   patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'), nullable=False)
   patient = db.relationship('Patient',backref=db.backref('sessions', lazy=True))
