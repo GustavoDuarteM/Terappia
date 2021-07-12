@@ -38,10 +38,10 @@ def edit_patients():
 @app.route('/patients', methods=['GET'])
 @jwt_required()
 def all_patients():
+  has_next = has_prev = False
   param_page = request.args.get('page')
   param_name = request.args.get('name')
   patients = Patient.query.filter_by(user_id = current_user.id).order_by(Patient.name.asc())
-
   if param_name: 
     search = "%{}%".format(param_name)
     patients = patients.filter(Patient.name.like(search))
@@ -49,11 +49,14 @@ def all_patients():
   if param_page:
     try: 
       param_page = int(param_page)
-      patients = patients.paginate(page=param_page, per_page= 10).items
+      patients = patients.paginate(page=param_page, per_page= 10)
+      has_next = patients.has_next
+      has_prev = patients.has_prev
+      patients = patients.items
     except ValueError:
       pass
 
-  return jsonify(patients = list(map(lambda patient: patient.serialize(['user_id','user','sessions']), patients)))
+  return jsonify(patients = list(map(lambda patient: patient.serialize(['user_id','user','sessions']), patients)),has_next = has_next, has_prev = has_prev)
 
 @app.route('/patients/<int:patient_id>/sessions', methods=['GET'])
 @jwt_required()
