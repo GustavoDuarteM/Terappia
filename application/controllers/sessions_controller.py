@@ -60,9 +60,9 @@ def edit_sessions():
 @app.route('/sessions', methods=['GET'])
 @jwt_required()
 def all_session():
+  has_next = has_prev = False
   sessions = Session.query.filter_by(user_id = current_user.id)\
                           .order_by(Session.start.asc())
-  has_next = has_prev = False
   
   try: 
     param_name = request.args.get('name')
@@ -92,7 +92,7 @@ def all_session():
   except ValueError:
     pass
 
-  return jsonify(sessions = list(map(lambda session: serilize_response(session), sessions)), has_next = has_next, hast_prev = has_prev )
+  return jsonify(sessions = list(map(lambda session: serilize_response(session), sessions)), has_next = has_next, has_prev = has_prev )
 
 @app.route('/sessions/<int:id>', methods=['DELETE'])
 @jwt_required()
