@@ -62,7 +62,7 @@ def edit_sessions():
 def all_session():
   has_next = has_prev = False
   sessions = Session.query.filter_by(user_id = current_user.id)\
-                          .order_by(Session.start.asc())
+                          .order_by(Session.start.desc())
   
   try: 
     param_name = request.args.get('name')
