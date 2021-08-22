@@ -19,10 +19,22 @@ Para rodar o projeto você vai precisar ter instalado o docker
 ### 🚀 Inicializando o projeto 
 1º Clone o repositório
 
-2º Acesse a pasta do projeto no terminal e rode os seguintes comandos
+2º Add as configurações de ambiente
+  O arquivo `.env` deve estar na raiz do projeto.
+  
+   Exemplo:
 ```
-  docker-compose build
-  docker-compose up -d
+DATABASE_URL = postgresql://postgres:password@localhost:5432/terapia_app
+JWT_SECRET_KEY = muito-seguro 
+REDIS_HOST= redis
+REDIS_PORT= 6379
+REDIS_PASSWORD = ''
+```
+
+3º Acesse a pasta do projeto no terminal e rode os seguintes comandos
+```
+docker-compose build
+docker-compose up -d
 ```
 ✨ O projeto está rodando e pode ser acessado http://localhost:80/
 
